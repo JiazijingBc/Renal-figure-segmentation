@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+    <title>肾图云</title>
+</head>
+<body>
+<!--导航-->
+<nav th:replace="fragments :: menu(1)" class="ui inverted segment m-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">后台管理</h2>
+            <a th:href="@{/admin/blogs}" class="item m-mobile-hide"><i class="mini home icon"></i>博客</a>
+            <a href="#" class="item m-mobile-hide"><i class="mini idea icon"></i>分类</a>
+            <a href="#" class="item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+            <div class="right m-mobile-hide menu">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img th:src="@{/images/111.jpg}" alt="" class="ui avatar image">
+                        贾子靖
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="#" th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!--中间-->
+<div class="m-container-small m-padded-tb-large">
+    <div class="ui attached container">
+
+
+        <div class="ui segment form">
+
+            <div class="field">
+                <span>请上传患者肾图原图</span>
+                <form id="shentu"  method="post" action="/file/uploadFile" enctype="multipart/form-data">
+                    <input type="file"  multiple="multiple" placeholder="上传测试集" name="file">
+                </form>
+            </div>
+            <div class="ui aligned container">
+                <button type="button" id="upload" class="ui mini basic teal button">上传</button>
+                <button type="button" id="begin" class="ui secondary button" onclick="begin()">开始</button>
+                <button type="button" id="curves" class="ui mini basic teal button" onclick="curves()">查看肾图曲线</button>
+                <button type="button" id="download" class="ui mini basic teal button">下载图片</button>
+            </div>
+            <div class="ui aligned container">
+                <img  id="beforeImg" width="200" height="200" />
+                <img  id="afterImg" width="200" height="200" />
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部-->
+<footer th:replace="fragments::footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img th:src="@{/images/111.jpg}" class="ui round image" alt="" style="width: 120px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">1</a>
+                    <a href="#" class="item">2</a>
+                    <a href="#" class="item">3</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">1</a>
+                    <a href="#" class="item">2</a>
+                    <a href="#" class="item">3</a>
+                </div></div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced">最新博客</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">adwfjkasidjfoasjdijoaisdfjpasghiufasdfasdf</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">域名啥玩意的</p>
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script type="text/javascript" src="/layer/layer.js"></script>
+<script>
+    var picture_name;
+    function begin(){
+        $.ajax({
+            url:"/segment",
+            type:"GET",
+
+            success:function(data){
+                layer.msg(data);
+                $("#beginImg").attr("src", "3.png");
+            },
+            error:function(){
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+    function curves(){
+        $.ajax({
+            url:"/curves",
+            type:"GET",
+
+            success:function(data){
+                layer.msg(data);
+                $("#afterImg").attr("src", "quxian.png");
+            },
+            error:function(){
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+    function flush(){
+
+        $("#beforeImg").attr("src", goods.goodsImg);
+        $("#afterImg").attr("src", goods.goodsImg);
+
+    }
+    $('.menu.toggle').click(function(){
+        $('.item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on :'hover'
+    });
+    $('#upload').click(function () {
+        var formData = new FormData($('#shentu')[0]);
+        // var src = window.URL.createObjectURL(formData);
+        // $("#beforeImg").attr("src", src);
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            url: "http://10.10.108.58:8080/file/uploadFile" ,//url
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                var img_url = result.url;
+                // console.log(img_url);
+                picture_name = img_url;
+                // $("#beforeImg").attr("src", img_url);
+                console.log(result);//打印服务端返回的数据(调试用)
+            },
+            error : function() {
+                alert("异常！");
+            }
+        });
+        // flush();
+    });
+    $('#download').click(function () {
+        // console.log(picture_name);
+        // var arr = picture_name.split(".");
+        // arr[0] = arr[0]+'3';
+        var url = 'quxian.png';
+        console.log(url);
+        location = 'http://10.10.108.58:8080/file/downloadFile/'+url;
+        // var src = window.URL.createObjectURL(formData);
+        // $("#beforeImg").attr("src", src);
+        $.ajax({
+            //几个参数需要注意一下
+            type: "GET",//方法类型
+            url: "http://10.10.108.58:8080/file/downloadFile/"+url ,//url
+            // data: url,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function () {
+                // var img_url = result.url;
+                // // console.log(img_url);
+                // $("#beforeImg").attr("src", img_url);
+                console.log("成功");//打印服务端返回的数据(调试用)
+
+            },
+            error : function() {
+                alert("异常！");
+            }
+        });
+        flush();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "file",
+      "type": "cn.objectspace.webssh.config.FileStorageProperties",
+      "sourceType": "cn.objectspace.webssh.config.FileStorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "file.upload-dir",
+      "type": "java.lang.String",
+      "sourceType": "cn.objectspace.webssh.config.FileStorageProperties"
+    }
+  ],
+  "hints": []
+}
