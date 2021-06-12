@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.objectspace.webssh.mapper.PatientImgMapper">
+
+
+    <select id="getLastPatientOriginImg" resultType="cn.objectspace.webssh.pojo.patientImg.OriginImg">
+        select * from t_ori_img order by patient_id desc limit 1
+--         select * from t_ori_img where patient_id = 76515770
+    </select>
+
+    <select id="getLastPatientSegmentImg" resultType="cn.objectspace.webssh.pojo.patientImg.SegmentImg">
+        select * from t_seg_img order by patient_id desc limit 1
+    </select>
+
+    <select id="getLastPatientCurveImg" resultType="cn.objectspace.webssh.pojo.patientImg.CurveImg">
+        select * from t_cur_img order by patient_id desc limit 1
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from t_ori_img
+    </select>
+</mapper>

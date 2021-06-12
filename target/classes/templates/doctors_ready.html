@@ -36,30 +36,32 @@
 </nav>
 
 <!--中间-->
-<div class="m-container-small m-padded-tb-large">
-    <div class="ui attached container">
+    <div class="m-container-small m-padded-tb-large">
+        <div class="ui attached container">
 
 
-        <div class="ui segment form">
+            <div class="ui segment form">
 
-            <div class="field">
-                <span>请上传患者肾图原图</span>
-                <form id="shentu"  method="post" action="/file/uploadFile" enctype="multipart/form-data">
-                    <input type="file"  multiple="multiple" placeholder="上传测试集" name="file">
-                </form>
+                <div class="field">
+                    <span>请上传患者肾图原图</span>
+                    <form id="shentu"  method="post" action="/file/uploadFile" enctype="multipart/form-data">
+                        <input type="file"  multiple="multiple" placeholder="上传测试集" name="file">
+                    </form>
+                </div>
+                <div class="ui aligned container">
+                    <button type="button" id="upload" class="ui mini basic teal button">上传</button>
+                    <button type="button" id="begin" class="ui secondary button" onclick="begin()">开始</button>
+                    <button type="button" id="origin" class="ui mini basic teal button" onclick="ori_img()">查看原图</button>
+                    <button type="button" id="segment" class="ui mini basic teal button" onclick="seg_img()">查看分割效果曲线</button>
+                    <button type="button" id="curves" class="ui mini basic teal button" onclick="curves()">查看肾图曲线</button>
+                    <button type="button" id="download" class="ui mini basic teal button">下载图片</button>
+                </div>
+                <div class="ui aligned container">
+                    <img  id="originImg" width="200" height="200" />
+                    <img  id="segmentImg" width="200" height="200" />
+                    <img  id="curveImg" width="200" height="200" />
+                </div>
             </div>
-            <div class="ui aligned container">
-                <button type="button" id="upload" class="ui mini basic teal button">上传</button>
-                <button type="button" id="begin" class="ui secondary button" onclick="begin()">开始</button>
-                <button type="button" id="curves" class="ui mini basic teal button" onclick="curves()">查看肾图曲线</button>
-                <button type="button" id="download" class="ui mini basic teal button">下载图片</button>
-            </div>
-            <div class="ui aligned container">
-                <img  id="beforeImg" width="200" height="200" />
-                <img  id="afterImg" width="200" height="200" />
-            </div>
-        </div>
-
         </div>
     </div>
 
@@ -117,12 +119,14 @@
 
 <script type="text/javascript" src="/layer/layer.js"></script>
 <script>
+
+
     var picture_name;
     function begin(){
         $.ajax({
             url:"/segment",
             type:"GET",
-
+            data: { Id: localStorage.getItem("userId")},
             success:function(data){
                 layer.msg(data);
                 $("#beginImg").attr("src", "3.png");
@@ -132,20 +136,49 @@
             }
         });
     }
-    function curves(){
+    function ori_img(){
         $.ajax({
-            url:"/curves",
+            url:"/getOriginPic",
             type:"GET",
 
             success:function(data){
                 layer.msg(data);
-                $("#afterImg").attr("src", "quxian.png");
+                $("#originImg").attr("src", "data:image/png;base64,"+data);
             },
             error:function(){
                 layer.msg("客户端请求有误");
             }
         });
     }
+    function seg_img(){
+        $.ajax({
+            url:"/getSegmentPic",
+            type:"GET",
+
+            success:function(data){
+                layer.msg(data);
+                $("#segmentImg").attr("src", "data:image/png;base64,"+data);
+            },
+            error:function(){
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+    function curves(){
+        $.ajax({
+            url:"/getCurvePic",
+            type:"GET",
+
+            success:function(data){
+                layer.msg(data);
+                $("#curveImg").attr("src", "data:image/png;base64,"+data);
+            },
+            error:function(){
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+
     function flush(){
 
         $("#beforeImg").attr("src", goods.goodsImg);
@@ -161,8 +194,6 @@
     });
     $('#upload').click(function () {
         var formData = new FormData($('#shentu')[0]);
-        // var src = window.URL.createObjectURL(formData);
-        // $("#beforeImg").attr("src", src);
         $.ajax({
             //几个参数需要注意一下
             type: "POST",//方法类型

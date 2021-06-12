@@ -1,6 +1,7 @@
 package cn.objectspace.webssh.controller;
 
 
+import org.junit.Test;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,16 +12,11 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @RestController
-public class TestController {
+public class SegmentController {
 
     @RequestMapping("/segment")
-    public String segment() throws IOException {
-        String exe = "python";
-        String command = "/Data0/master/jzj/Unet-Project-2Class/kidneymapcloud/img_controller.py";
-
-        String[] cmdArr = new String[] {exe,command};
-
-        Process process = Runtime.getRuntime().exec(cmdArr);
+    public String segment(int Id) throws IOException {
+        Process process = Runtime.getRuntime().exec("python /Data0/master/jzj/Unet-Project-2Class/kidneymapcloud/img_controller.py "+Id);
 
         InputStream is = process.getInputStream();
 
@@ -33,14 +29,14 @@ public class TestController {
         return "图片分割已经完成";
     }
 
-    @RequestMapping("/curves")
-    public String curves() throws IOException {
-        String exe = "python";
-        String command = "/Data0/master/jzj/Unet-Project-2Class/kidneymapcloud/BCcurves.py";
 
-        String[] cmdArr = new String[] {exe,command};
-
-        Process process = Runtime.getRuntime().exec(cmdArr);
+    @Test
+    public void test() throws IOException {
+//        String exe = "python";
+//        String command = "/Users/huolingfeng/Documents/TencentMeeting/main.py " + 1;
+//        System.out.println(command);
+//        String[] cmdArr = new String[] {exe,command};
+        Process process = Runtime.getRuntime().exec("python /Users/huolingfeng/Documents/TencentMeeting/main.py 1");
 
         InputStream is = process.getInputStream();
 
@@ -50,6 +46,6 @@ public class TestController {
         while ((i = is.read(buffer)) != -1) {
             System.out.println(new String(buffer));
         }
-        return "曲线绘制完成";
     }
+
 }

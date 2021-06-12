@@ -36,4 +36,13 @@ public class RouterController {
         return "segment";
     }
 
+    @RequestMapping("/tologin")
+    public String toLogin(){
+        return "login";
+    }
+    @RequestMapping("/toPatient")
+    public String toPatient(){
+        return "patient";
+    }
+
 }
